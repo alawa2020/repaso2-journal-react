@@ -1,1 +1,1 @@
-# Repaso 2 Todo App
+# Repaso 2 JournalApp React
