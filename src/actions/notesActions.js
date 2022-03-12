@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 
 import { types } from '../types/types';
 import { db } from '../firebase/config';
+import { getNotes } from '../utils/getNotes';
 
 //* ACTIONS SINCRONOS
 export const doNotesActiveNote = (note) => ({
@@ -25,6 +26,14 @@ export const doNotesSaveNewNote = (newNote) => ({
     newNote,
   },
 });
+
+export const doNotesLoadNotes = (notes) => ({
+  type: types.notesLoadNotes,
+  payload: {
+    notes,
+  },
+});
+
 //* ACTIONS ASINCRONOS
 
 export const startSaveNewNote = (newNote) => {
@@ -48,5 +57,13 @@ export const startSaveNewNote = (newNote) => {
       console.log({ err });
       Swal.fire('Ocurrió un error!', err.message, 'error');
     }
+  };
+};
+
+export const startLoadNotes = () => {
+  return async (dispatch, getState) => {
+    const { uid } = getState().auth;
+    const notes = await getNotes(uid);
+    dispatch(doNotesLoadNotes(notes));
   };
 };

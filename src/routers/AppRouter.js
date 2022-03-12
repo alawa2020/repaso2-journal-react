@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 
 import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
 
 import { auth } from '../firebase/config';
 import { JournalScreen } from '../components/journal/JournalScreen';
 import { AuthRouter } from './AuthRouter';
 import { PrivateRoute } from './PrivateRoute';
 import { PublicRoute } from './PublicRoute';
-import { useDispatch } from 'react-redux';
 import { doAuthLogin } from '../actions/authActions';
+import { startLoadNotes } from '../actions/notesActions';
 
 export const AppRouter = () => {
   //hooks
@@ -20,8 +21,9 @@ export const AppRouter = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user?.uid) {
-        setIsAuth(true);
         dispatch(doAuthLogin(user.uid, user.displayName));
+        setIsAuth(true);
+        dispatch(startLoadNotes());
       } else {
         setIsAuth(false);
       }

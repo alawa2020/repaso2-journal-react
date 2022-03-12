@@ -1,31 +1,30 @@
-import React from 'react'
+import React from 'react';
+import dayjs from 'dayjs';
 
-export const JournalEntry = () => {
-    return (
-        <div className="journal__entry pointer">
-            
-            <div 
-                className="journal__entry-picture"
-                style={{
-                    backgroundSize: 'cover',
-                    backgroundImage: 'url(https://earthsky.org/upl/2018/12/comet-wirtanen-Jack-Fusco-dec-2018-Anza-Borrego-desert-CA-e1544613895713.jpg)'
-                }}
-            ></div>
+export const JournalEntry = ({ title, body, date, imageUrl }) => {
+  const dateDayName = dayjs(date).format('dddd');
+  const dateDayNumber = dayjs(date).format('D');
+  const dateTime = dayjs(date).format('h[:]mma');
+  return (
+    <div className="journal__entry pointer">
+      <div
+        className="journal__entry-picture"
+        style={{
+          backgroundSize: 'cover',
+          backgroundImage: `url(${imageUrl})`,
+        }}
+      ></div>
 
-            <div className="journal__entry-body">
-                <p className="journal__entry-title">
-                    Un nuevo día
-                </p>
-                <p className="journal__entry-content">
-                    Reprehenderit id in duis consectetur deserunt veniam fugiat.
-                </p>
-            </div>
+      <div className="journal__entry-body">
+        <p className="journal__entry-title">{title}</p>
+        <p className="journal__entry-content">{body}</p>
+      </div>
 
-            <div className="journal__entry-date-box">
-                <span>Monday</span>
-                <h4>28</h4>
-            </div>
-
-        </div>
-    )
-}
+      <div className="journal__entry-date-box">
+        <span>{dateDayName}</span>
+        <h4>{dateDayNumber}</h4>
+        <span>{dateTime}</span>
+      </div>
+    </div>
+  );
+};
