@@ -2,6 +2,8 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
@@ -39,6 +41,20 @@ export const startAuthSignUp = (name, email, password) => {
       Swal.fire('Ocurrió un error!', err.message, 'error');
     } finally {
       console.log('raaaa');
+    }
+  };
+};
+
+export const startSignInGoogle = () => {
+  return async (dispatch) => {
+    const googleAuthProvider = new GoogleAuthProvider();
+    try {
+      const { user } = await signInWithPopup(auth, googleAuthProvider);
+      dispatch(doAuthLogin(user.uid, user.displayName));
+      Swal.fire('Registro exitoso!', 'Sesión iniciada', 'success');
+    } catch (err) {
+      console.log({ err });
+      Swal.fire('Ocurrió un error!', err.message, 'error');
     }
   };
 };

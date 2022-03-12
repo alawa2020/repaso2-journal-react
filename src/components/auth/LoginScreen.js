@@ -1,7 +1,16 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { startSignInGoogle } from '../../actions/authActions';
 
 export const LoginScreen = () => {
+  //hooks
+  const dispatch = useDispatch();
+
+  //functions
+  const handleSignInGoogle = () => {
+    dispatch(startSignInGoogle());
+  };
   return (
     <div className="auth auth-login px-3">
       <h1 className="text-primary text-center">Login</h1>
@@ -29,7 +38,7 @@ export const LoginScreen = () => {
       </form>
 
       {/* GOOGLE BUTTON */}
-      <div className="google-btn mb-3">
+      <div className="google-btn mb-3" onClick={handleSignInGoogle}>
         <div className="google-icon-wrapper">
           <img
             className="google-icon"
