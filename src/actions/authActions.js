@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 
 import { auth } from '../firebase/config';
 import { types } from '../types/types';
+import { doCleanNotes } from './notesActions';
 
 //* ACTIONS SINCRONOS
 
@@ -65,7 +66,7 @@ export const startSignInGoogle = () => {
     try {
       const { user } = await signInWithPopup(auth, googleAuthProvider);
       dispatch(doAuthLogin(user.uid, user.displayName));
-      Swal.fire('Registro exitoso!', 'Sesión iniciada', 'success');
+      Swal.fire('Credenciales correctas!', 'Sesión iniciada', 'success');
     } catch (err) {
       console.log({ err });
       Swal.fire('Ocurrió un error!', err.message, 'error');
@@ -79,6 +80,7 @@ export const startAuthSignOut = () => {
       await signOut(auth);
       Swal.fire('Sesión cerrada!', 'Hasta pronto', 'success');
       dispatch(doAuthSignOut());
+      dispatch(doCleanNotes());
     } catch (err) {
       console.log({ err });
     }

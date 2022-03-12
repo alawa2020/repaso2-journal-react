@@ -1,4 +1,10 @@
-import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  deleteDoc,
+} from 'firebase/firestore';
 import Swal from 'sweetalert2';
 
 import { types } from '../types/types';
@@ -39,6 +45,21 @@ export const doNotesUpdateNote = (note) => ({
   payload: {
     note,
   },
+});
+
+export const doNotesDeleteNote = (id) => ({
+  type: types.notesDeleteNote,
+  payload: {
+    id,
+  },
+});
+
+export const doRemoveActiveNote = () => ({
+  type: types.notesRemoveActiveNote,
+});
+
+export const doCleanNotes = () => ({
+  type: types.notesCleanNotes,
 });
 
 //* ACTIONS ASINCRONOS
@@ -90,6 +111,22 @@ export const startUpdateNote = (note) => {
       dispatch(doNotesUpdateActiveNote({ date: newDate }));
 
       Swal.fire('Note updated!', noteToUpdate.title, 'success');
+    } catch (err) {
+      console.log({ err });
+      Swal.fire('Ocurrió un error!', err.message, 'error');
+    }
+  };
+};
+
+export const startDeleteNote = (id) => {
+  return async (dispatch, getState) => {
+    const { uid } = getState().auth;
+    try {
+      const docRef = doc(db, `/${uid}/journal/notes/`, id);
+      await deleteDoc(docRef);
+      dispatch(doNotesDeleteNote(id));
+      dispatch(doRemoveActiveNote());
+      Swal.fire('Note deleted', `Ref: ${id}`, 'success');
     } catch (err) {
       console.log({ err });
       Swal.fire('Ocurrió un error!', err.message, 'error');
