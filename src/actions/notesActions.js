@@ -1,4 +1,4 @@
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 
 import { types } from '../types/types';
@@ -34,6 +34,13 @@ export const doNotesLoadNotes = (notes) => ({
   },
 });
 
+export const doNotesUpdateNote = (note) => ({
+  type: types.notesUpdateNote,
+  payload: {
+    note,
+  },
+});
+
 //* ACTIONS ASINCRONOS
 
 export const startSaveNewNote = (newNote) => {
@@ -65,5 +72,27 @@ export const startLoadNotes = () => {
     const { uid } = getState().auth;
     const notes = await getNotes(uid);
     dispatch(doNotesLoadNotes(notes));
+  };
+};
+
+export const startUpdateNote = (note) => {
+  return async (dispatch, getState) => {
+    const { uid } = getState().auth;
+    try {
+      const newDate = new Date().getTime();
+      const noteToUpdate = { ...note };
+      noteToUpdate.date = newDate;
+      delete noteToUpdate.id;
+
+      const docRef = doc(db, `/${uid}/journal/notes/`, `${note.id}`);
+      await updateDoc(docRef, noteToUpdate);
+      dispatch(doNotesUpdateNote({ ...noteToUpdate, id: note.id }));
+      dispatch(doNotesUpdateActiveNote({ date: newDate }));
+
+      Swal.fire('Note updated!', noteToUpdate.title, 'success');
+    } catch (err) {
+      console.log({ err });
+      Swal.fire('Ocurrió un error!', err.message, 'error');
+    }
   };
 };

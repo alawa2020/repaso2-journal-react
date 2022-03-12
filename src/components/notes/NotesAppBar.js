@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   doNotesUpdateActiveNote,
   startSaveNewNote,
+  startUpdateNote,
 } from '../../actions/notesActions';
 import { uploadImageAndGetUrl } from '../../utils/uploadImageAndGetUrl';
 
@@ -30,7 +31,7 @@ export const NotesAppBar = () => {
 
   const handleSaveNote = () => {
     if (activeNote.id) {
-      console.log('actualizar');
+      dispatch(startUpdateNote(activeNote));
     } else {
       dispatch(startSaveNewNote(activeNote));
       console.log('subir new note');
