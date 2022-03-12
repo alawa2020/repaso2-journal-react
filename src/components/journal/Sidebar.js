@@ -16,8 +16,8 @@ export const Sidebar = () => {
   const handleNewEntry = () => {
     const emptyNote = {
       id: '',
-      title: 'new title',
-      body: 'body empty',
+      title: '',
+      body: '',
       imageUrl: '',
       date: new Date().getTime(),
     };

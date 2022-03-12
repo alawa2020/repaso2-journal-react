@@ -7,10 +7,10 @@ import { isValidFormRegister } from '../../utils/isValidFormRegister';
 import { ErrorSentForm } from './ErrorSentForm';
 
 const initialForm = {
-  name: 'Peter',
-  email: 'peter@gmail.com',
-  password: '123456',
-  password2: '123456',
+  name: '',
+  email: '',
+  password: '',
+  password2: '',
 };
 
 export const RegisterScreen = () => {
@@ -74,7 +74,7 @@ export const RegisterScreen = () => {
         <input
           className="form-control mb-3"
           type="password"
-          placeholder="Repeat your password"
+          placeholder="Confirm your password"
           autoComplete="off"
           name="password2"
           value={password2}
