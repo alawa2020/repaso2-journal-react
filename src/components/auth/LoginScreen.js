@@ -1,33 +1,63 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { startSignInGoogle } from '../../actions/authActions';
+import {
+  startSignInEmailPassword,
+  startSignInGoogle,
+} from '../../actions/authActions';
+import { doRemoveError, doSetError } from '../../actions/uiAuthActions';
+import { useForm } from '../../hooks/useForm';
+import { isValidFormLogin } from '../../utils/isValidFormLogin';
+import { ErrorSentForm } from './ErrorSentForm';
+
+const initialForm = {
+  email: 'peter@gmail.com',
+  password: '123456',
+};
 
 export const LoginScreen = () => {
   //hooks
   const dispatch = useDispatch();
-
+  const { error } = useSelector((state) => state.uiAuth);
+  const { formData, handleInputChange } = useForm(initialForm);
+  const { email, password } = formData;
   //functions
   const handleSignInGoogle = () => {
     dispatch(startSignInGoogle());
   };
+
+  const handleSignInEmailPassword = (e) => {
+    e.preventDefault();
+    dispatch(doRemoveError());
+    const { error, isValidForm } = isValidFormLogin(email, password);
+    if (!isValidForm) {
+      dispatch(doSetError(error));
+      return;
+    }
+    dispatch(startSignInEmailPassword(email, password));
+  };
   return (
     <div className="auth auth-login px-3">
+      {error && <ErrorSentForm errorMessage={error} />}
       <h1 className="text-primary text-center">Login</h1>
-      <form className="auth-login__form">
+      <form className="auth-login__form" onSubmit={handleSignInEmailPassword}>
         <input
           className="form-control mb-3"
           type="email"
-          name="email"
           placeholder="Input your email"
           autoComplete="off"
+          name="email"
+          value={email}
+          onChange={handleInputChange}
         />
         <input
           className="form-control mb-3"
           type="password"
-          name="password"
           placeholder="Input your password"
           autoComplete="off"
+          name="password"
+          value={password}
+          onChange={handleInputChange}
         />
 
         <div className="d-grid gap-2">

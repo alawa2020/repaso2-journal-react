@@ -4,6 +4,7 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithEmailAndPassword,
 } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
@@ -41,6 +42,19 @@ export const startAuthSignUp = (name, email, password) => {
       Swal.fire('Ocurrió un error!', err.message, 'error');
     } finally {
       console.log('raaaa');
+    }
+  };
+};
+
+export const startSignInEmailPassword = (email, password) => {
+  return async (dispatch) => {
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      dispatch(doAuthLogin(user.uid, user.displayName));
+      Swal.fire('Sesión iniciada!', 'Bienvenido de nuevo', 'success');
+    } catch (err) {
+      console.log({ err });
+      Swal.fire('Ocurrió un error!', err.message, 'error');
     }
   };
 };
