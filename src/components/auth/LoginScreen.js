@@ -11,7 +11,7 @@ import { isValidFormLogin } from '../../utils/isValidFormLogin';
 import { ErrorSentForm } from './ErrorSentForm';
 
 const initialForm = {
-  email: 'peter@gmail.com',
+  email: 'katness@gmail.com',
   password: '123456',
 };
 
