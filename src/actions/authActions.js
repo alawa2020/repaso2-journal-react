@@ -1,7 +1,11 @@
-import { auth } from '../firebase/config';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signOut,
+} from 'firebase/auth';
 import Swal from 'sweetalert2';
 
+import { auth } from '../firebase/config';
 import { types } from '../types/types';
 
 //* ACTIONS SINCRONOS
@@ -14,7 +18,7 @@ export const doAuthLogin = (uid, name) => ({
   },
 });
 
-export const doAuthLogout = () => ({
+export const doAuthSignOut = () => ({
   type: types.authLogout,
 });
 
@@ -35,6 +39,18 @@ export const startAuthSignUp = (name, email, password) => {
       Swal.fire('Ocurrió un error!', err.message, 'error');
     } finally {
       console.log('raaaa');
+    }
+  };
+};
+
+export const startAuthSignOut = () => {
+  return async (dispatch) => {
+    try {
+      await signOut(auth);
+      Swal.fire('Sesión cerrada!', 'Hasta pronto', 'success');
+      dispatch(doAuthSignOut());
+    } catch (err) {
+      console.log({ err });
     }
   };
 };
