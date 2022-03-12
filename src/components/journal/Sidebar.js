@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { startAuthSignOut } from '../../actions/authActions';
+import { doNotesActiveNote } from '../../actions/notesActions';
 import { JournalEntries } from './JournalEntries';
 
 export const Sidebar = () => {
@@ -10,6 +11,17 @@ export const Sidebar = () => {
   //functions
   const handleSignOut = () => {
     dispatch(startAuthSignOut());
+  };
+
+  const handleNewEntry = () => {
+    const emptyNote = {
+      id: '',
+      title: 'new title',
+      body: 'body empty',
+      imageUrl: '',
+      date: new Date().getTime(),
+    };
+    dispatch(doNotesActiveNote(emptyNote));
   };
 
   return (
@@ -25,7 +37,7 @@ export const Sidebar = () => {
         </button>
       </div>
 
-      <div className="journal__new-entry">
+      <div className="journal__new-entry" onClick={handleNewEntry}>
         <i className="far fa-calendar-plus fa-5x"></i>
         <p className="mt-5">New entry</p>
       </div>
